@@ -1,11 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	"os"
+	"time"
 
-	prom "github.com/pilly-io/metrics-collector/internal/prometheus"
+	"github.com/pilly-io/metrics-collector/internal/prometheus/client"
+	"github.com/pilly-io/metrics-collector/internal/prometheus/collector"
+	prom "github.com/prometheus/common/model"
+	log "github.com/sirupsen/logrus"
 )
+
+func init() {
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetReportCaller(true)
+	log.SetOutput(os.Stdout)
+	log.SetLevel(log.DebugLevel)
+}
 
 func main() {
 	// recup config
@@ -17,13 +27,25 @@ func main() {
 		log.Fatalf("configuration error: %s", err)
 	}
 
-	client, err := prom.New(prom.APIV1, config.PrometheusURL)
+	promConfig := client.ClientConfig{
+		Version:  client.APIV1,
+		Timeout:  1 * time.Second,
+		Endpoint: config.PrometheusURL,
+	}
+	client, err := client.New(promConfig)
 	if err != nil {
 		log.Fatalf("can't create prometheus client: %s", err)
 	}
 
-	samples, err := client.GetPodsMemoryRequests()
-	for _, sample := range samples {
-		fmt.Printf("%s=%s\n", sample.Metric, sample.Value)
-	}
+	metrics := make(chan *prom.Sample, 20)
+	collector := collector.New(client, metrics, collector.CollectorConfig{ScrapeInterval: 2 * time.Second})
+
+	collector.Run()
+	go func() {
+		for _ = range metrics {
+			//log.Infof("%s=%s", sample.Metric, sample.Value)
+		}
+	}()
+	time.Sleep(10 * time.Second)
+	collector.Stop()
 }
