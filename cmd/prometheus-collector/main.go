@@ -14,13 +14,16 @@ func main() {
 	config := GetConfig()
 	err := config.Validate()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalf("configuration error: %s", err)
 	}
 
 	client, err := prom.New(prom.APIV1, config.PrometheusURL)
 	if err != nil {
-		log.Fatalf("configuration error: %s", err)
+		log.Fatalf("can't create prometheus client: %s", err)
 	}
 
-	client.GetPodsMemoryRequests()
+	samples, err := client.GetPodsMemoryRequests()
+	for _, sample := range samples {
+		fmt.Printf("%s=%s\n", sample.Metric, sample.Value)
+	}
 }

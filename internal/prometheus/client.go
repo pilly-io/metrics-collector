@@ -2,6 +2,8 @@ package prometheus
 
 import (
 	"fmt"
+
+	prom "github.com/prometheus/common/model"
 )
 
 const (
@@ -9,7 +11,7 @@ const (
 )
 
 type Client interface {
-	GetPodsMemoryRequests() (error, error)
+	GetPodsMemoryRequests() (prom.Vector, error)
 }
 
 func New(version string, endpoint string) (Client, error) {
