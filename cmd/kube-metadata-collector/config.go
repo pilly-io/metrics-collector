@@ -13,16 +13,15 @@ type Config struct {
 }
 
 func GetConfig() Config {
-	viper.SetEnvPrefix("pilly")
-	viper.AutomaticEnv()
-	viper.SetDefault("interval", 60)
-	DbURI := viper.GetString("db_uri")
-	if DbURI == "" {
-		log.Error("DbURI not set")
-		os.Exit(1)
-	}
 	return Config{
-		DbURI:    DbURI,
-		Interval: viper.GetInt("interval"),
+		DBURI:         viper.GetString("DB_URI"),
+		Interval:      viper.GetInt("INTERVAL"),
 	}
+}
+
+func (config Config) Validate() error {
+	if if config.DBURI == "" {
+		return errors.New("database URI not set")
+	}
+	return nil
 }
