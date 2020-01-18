@@ -6,7 +6,11 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-func NewKubernetesClient(kubeconfig string) (*kubernetes.Clientset, error) {
+type Client struct{
+	conn *kubernetes.Clientset
+}
+
+func NewKubernetesClient(kubeconfig string) (*Client, error) {
 	var config *rest.Config
 	var err error
 	if kubeconfig == "" {
@@ -18,6 +22,9 @@ func NewKubernetesClient(kubeconfig string) (*kubernetes.Clientset, error) {
 		return nil, err
 	}
 	// creates the client
-	client, _ := kubernetes.NewForConfig(config)
-	return client, err
+	config.TLSClientConfig.Insecure = true
+	config.TLSClientConfig.CAData = make([]byte, 0)
+	config.TLSClientConfig.CAFile = ""
+	client, err := kubernetes.NewForConfig(config)
+	return &Client{conn: client}, err
 }

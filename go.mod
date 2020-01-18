@@ -26,6 +26,7 @@ require (
 	golang.org/x/arch v0.0.0-20191126211547-368ea8f32fff // indirect
 	golang.org/x/sys v0.0.0-20200117145432-59e60aa80a0c // indirect
 	gopkg.in/yaml.v2 v2.2.7 // indirect
+	k8s.io/apimachinery v0.17.1
 	k8s.io/client-go v0.17.1
 	k8s.io/utils v0.0.0-20200117235808-5f6fbceb4c31 // indirect
 )

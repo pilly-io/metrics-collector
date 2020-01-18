@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	log "github.com/sirupsen/logrus"
 	"github.com/pilly-io/metrics-collector/internal/kubernetes"
@@ -29,9 +28,9 @@ func main() {
 	}
 	db.Migrate()
 	//3. Initialize Kubernetes API
-	kubernetesClient, err := kubernetes.NewKubernetesClient(config.KubeconfigPath)
+	client, err := kubernetes.NewKubernetesClient(config.KubeconfigPath)
 	if err != nil {
 		log.Fatalf("cannot initialize kubernetes client: %s", err)
 	}
-	fmt.Println(kubernetesClient)
+	client.ListNodes()
 }
