@@ -1,11 +1,9 @@
 package models
 
 import (
-	"time"
-
 	"github.com/satori/go.uuid"
 	"github.com/jinzhu/gorm"
-	// _ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 type Node struct {
@@ -19,16 +17,12 @@ type Node struct {
 	Version      string
 	OS           string
 	Labels       string
-	UpdatedAt    time.Time
-	CreatedAt    time.Time
 }
 
 type Namespace struct {
 	gorm.Model
 	Name      string
 	Labels    string
-	UpdatedAt time.Time
-	CreatedAt time.Time
 }
 
 type PodOwner struct {
@@ -36,6 +30,4 @@ type PodOwner struct {
 	Type      string
 	Name      string
 	Labels    string
-	UpdatedAt time.Time
-	CreatedAt time.Time
 }

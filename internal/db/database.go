@@ -1,20 +1,20 @@
 package db
 
 import (
-	"os"
-
 	"github.com/jinzhu/gorm"
-	log "github.com/sirupsen/logrus"
+	"github.com/pilly-io/metrics-collector/internal/models"
 )
 
-func NewDb(DbUri string) *gorm.DB {
-	db, err := gorm.Open("sqlite3", DbUri)
-	if err != nil {
-		log.Error("Failed to connect database")
-		os.Exit(1)
-	}
-	defer db.Close()
-	// Temporary migration 
-	//db.AutoMigrate(&Node{}, &Namespace{}, &PodOwner{})
-	return db
+type Database struct{
+	client *gorm.DB
+}
+
+func NewDb(DBURI string) (Database, error) {
+	db, err := gorm.Open("sqlite3", DBURI)
+	return Database{client: db}, err
+}
+
+func (db Database) Migrate() {
+	// Dummy migration
+	db.client.AutoMigrate(&models.Node{}, &models.Namespace{}, &models.PodOwner{})
 }

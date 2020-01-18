@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	log "github.com/sirupsen/logrus"
-    "github.com/pilly-io/metrics-collector/internal/kubernetes"
+	"github.com/pilly-io/metrics-collector/internal/kubernetes"
+	database "github.com/pilly-io/metrics-collector/internal/db"
 )
 
 func init() {
@@ -21,12 +23,15 @@ func main() {
 		log.Fatalf("configuration error: %s", err)
 	}
 	//2. Connect to the db
-	//db := NewDb(config.DbURI)
-	//log.Info(db)
+	db, err := database.NewDb(config.DBURI)
+	if err != nil {
+		log.Fatalf("cannot initialize the database: %s", err)
+	}
+	db.Migrate()
 	//3. Initialize Kubernetes API
 	kubernetesClient, err := kubernetes.NewKubernetesClient(config.KubeconfigPath)
 	if err != nil {
 		log.Fatalf("cannot initialize kubernetes client: %s", err)
 	}
-	log.Info(kubernetesClient)
+	fmt.Println(kubernetesClient)
 }
