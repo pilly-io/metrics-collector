@@ -3,8 +3,7 @@ package main
 import (
 	"os"
 	log "github.com/sirupsen/logrus"
-	"github.com/pilly-io/metrics-collector/internal/kubernetes"
-	"github.com/spf13/viper"
+    "github.com/pilly-io/metrics-collector/internal/kubernetes"
 )
 
 func init() {
@@ -12,10 +11,6 @@ func init() {
 	log.SetReportCaller(true)
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.InfoLevel)
-
-	viper.SetEnvPrefix("pilly")
-	viper.AutomaticEnv()
-	viper.SetDefault("interval", 60)
 }
 
 func main() {
@@ -29,6 +24,9 @@ func main() {
 	//db := NewDb(config.DbURI)
 	//log.Info(db)
 	//3. Initialize Kubernetes API
-	kubernetesClient := NewKubernetesClient()
+	kubernetesClient, err := kubernetes.NewKubernetesClient(config.KubeconfigPath)
+	if err != nil {
+		log.Fatalf("cannot initialize kubernetes client: %s", err)
+	}
 	log.Info(kubernetesClient)
 }

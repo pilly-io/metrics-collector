@@ -12,7 +12,6 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.4.0
-	k8s.io/api v0.17.1 // indirect
-	k8s.io/client-go v11.0.0+incompatible
+	k8s.io/client-go v0.17.1
 	k8s.io/utils v0.0.0-20200117235808-5f6fbceb4c31 // indirect
 )
