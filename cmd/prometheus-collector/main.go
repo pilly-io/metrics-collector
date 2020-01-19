@@ -40,6 +40,12 @@ func main() {
 	metrics := make(chan *prom.Sample, 20)
 	collector := collector.New(client, metrics, collector.CollectorConfig{ScrapeInterval: 2 * time.Second})
 
+	if err := collector.Run(); err != nil {
+		log.Error(err)
+	}
+	if err := collector.Run(); err != nil {
+		log.Error(err)
+	}
 	collector.Run()
 	go func() {
 		for _ = range metrics {
@@ -47,5 +53,10 @@ func main() {
 		}
 	}()
 	time.Sleep(10 * time.Second)
-	collector.Stop()
+	if err := collector.Stop(); err != nil {
+		log.Error(err)
+	}
+	if err := collector.Stop(); err != nil {
+		log.Error(err)
+	}
 }

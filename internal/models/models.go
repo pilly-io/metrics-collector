@@ -1,9 +1,9 @@
 package models
 
 import (
-	"github.com/satori/go.uuid"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	uuid "github.com/satori/go.uuid"
 )
 
 type Node struct {
@@ -21,13 +21,24 @@ type Node struct {
 
 type Namespace struct {
 	gorm.Model
-	Name      string
-	Labels    string
+	Name   string
+	Labels string
 }
 
 type PodOwner struct {
 	gorm.Model
-	Type      string
-	Name      string
-	Labels    string
+	Type   string
+	Name   string
+	Labels string
+}
+
+type PodMetric struct {
+	gorm.Model
+	MetricName  string
+	MetricValue float64
+	Namespace   string
+	NodeName    string
+	PodName     string
+	OwnerType   string
+	OwnerName   string
 }

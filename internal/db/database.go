@@ -5,7 +5,7 @@ import (
 	"github.com/pilly-io/metrics-collector/internal/models"
 )
 
-type Database struct{
+type Database struct {
 	client *gorm.DB
 }
 
@@ -16,5 +16,5 @@ func NewDb(DBURI string) (Database, error) {
 
 func (db Database) Migrate() {
 	// Dummy migration
-	db.client.AutoMigrate(&models.Node{}, &models.Namespace{}, &models.PodOwner{})
+	db.client.AutoMigrate(&models.Node{}, &models.Namespace{}, &models.PodOwner{}, &models.PodMetric{})
 }
