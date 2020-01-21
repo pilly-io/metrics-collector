@@ -36,4 +36,17 @@ func main() {
 	if err != nil {
 		log.Fatalf("cannot list the nodes: %s", err)
 	}
+	log.Info(nodes)
+
+	namespaces, err := client.ListNamespaces()
+	if err != nil {
+		log.Fatalf("cannot list the namespaces: %s", err)
+	}
+	log.Info(namespaces)
+
+	/*pods, err := client.ListPods()
+	if err != nil {
+		log.Fatalf("cannot list the pods: %s", err)
+	}
+	log.Info(pods)*/
 }
