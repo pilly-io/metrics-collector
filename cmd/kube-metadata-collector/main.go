@@ -1,10 +1,10 @@
 package main
 
 import (
-	"os"
-	log "github.com/sirupsen/logrus"
-	"github.com/pilly-io/metrics-collector/internal/kubernetes"
 	database "github.com/pilly-io/metrics-collector/internal/db"
+	"github.com/pilly-io/metrics-collector/internal/kubernetes"
+	log "github.com/sirupsen/logrus"
+	"os"
 )
 
 func init() {
@@ -32,5 +32,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("cannot initialize kubernetes client: %s", err)
 	}
-	client.ListNodes()
+	nodes, err := client.ListNodes()
+	if err != nil {
+		log.Fatalf("cannot list the nodes: %s", err)
+	}
 }
