@@ -4,17 +4,20 @@ import (
 	"fmt"
 	"time"
 
-	prom "github.com/prometheus/common/model"
+	"github.com/pilly-io/metrics-collector/internal/models"
 )
 
 const (
 	APIV1 = "v1"
 )
 
+type MetricsList []*models.PodMetric
+
 type Client interface {
-	GetPodsRequests() (prom.Vector, error)
-	GetPodsMemoryUsage() (prom.Vector, error)
-	GetPodsCPUUsage() (prom.Vector, error)
+	GetPodsCPURequests() (MetricsList, error)
+	GetPodsMemoryRequests() (MetricsList, error)
+	GetPodsMemoryUsage() (MetricsList, error)
+	GetPodsCPUUsage() (MetricsList, error)
 }
 
 type ClientConfig struct {
