@@ -44,9 +44,9 @@ func main() {
 	}
 	log.Info(namespaces)
 
-	/*pods, err := client.ListPods()
+	pods, err := client.ListPods()
 	if err != nil {
 		log.Fatalf("cannot list the pods: %s", err)
 	}
-	log.Info(pods)*/
+	log.Info(len(*pods))
 }

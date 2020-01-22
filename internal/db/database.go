@@ -16,5 +16,5 @@ func NewDb(DBURI string) (Database, error) {
 
 func (db Database) Migrate() {
 	// Dummy migration
-	db.client.AutoMigrate(&models.Node{}, &models.Namespace{}, &models.PodOwner{}, &models.PodMetric{})
+	db.client.AutoMigrate(&models.Node{}, &models.Namespace{}, &models.Pod{}, &models.PodMetric{})
 }

@@ -25,11 +25,13 @@ type Namespace struct {
 	Labels string
 }
 
-type PodOwner struct {
+type Pod struct {
 	gorm.Model
-	Type   string
-	Name   string
-	Labels string
+	Name      string
+	Namespace string
+	Labels    string
+	OwnerType string
+	OwnerName string
 }
 
 type PodMetric struct {
