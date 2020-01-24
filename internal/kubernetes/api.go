@@ -11,7 +11,7 @@ type Owner struct {
 	Name, Type string
 }
 
-func (owner *Owner) find(ownerReferences *[]metav1.OwnerReference) {
+func (owner *Owner) findByReference(ownerReferences *[]metav1.OwnerReference) {
 	for _, ownerReference := range *ownerReferences {
 		if !*ownerReference.Controller {
 			continue
@@ -34,7 +34,7 @@ func (client Client) listJobs() (*OwnersList, error) {
 	for _, item := range items.Items {
 		name := item.ObjectMeta.Name
 		owner := Owner{}
-		owner.find(&item.ObjectMeta.OwnerReferences)
+		owner.findByReference(&item.ObjectMeta.OwnerReferences)
 		objects[name] = owner
 	}
 	return &objects, err
@@ -50,7 +50,7 @@ func (client Client) listReplicaSets() (*OwnersList, error) {
 	for _, item := range items.Items {
 		name := item.ObjectMeta.Name
 		owner := Owner{}
-		owner.find(&item.ObjectMeta.OwnerReferences)
+		owner.findByReference(&item.ObjectMeta.OwnerReferences)
 		objects[name] = owner
 	}
 	return &objects, err
@@ -75,7 +75,7 @@ func (client Client) ListPods() (*[]models.Pod, error) {
 		// if there is none, then it's a single pod running
 		// otherwise it can be: replicaset, job, statefulset and daemonset
 		owner := Owner{}
-		owner.find(&item.ObjectMeta.OwnerReferences)
+		owner.findByReference(&item.ObjectMeta.OwnerReferences)
 		if owner.Type == "Job" {
 			owner, _ = (*jobs)[owner.Name]
 		} else if owner.Type == "ReplicaSet" {
