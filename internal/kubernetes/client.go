@@ -14,7 +14,7 @@ type IClient interface {
 }
 
 type Client struct {
-	conn *kubernetes.Clientset
+	conn kubernetes.Interface
 }
 
 type Configurator interface {

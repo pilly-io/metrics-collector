@@ -20,7 +20,6 @@ require (
 	github.com/prometheus/common v0.7.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
-	github.com/spf13/cobra v0.0.5 // indirect
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.4.0
 	go.starlark.net v0.0.0-20191227232015-caa3e9aa5008 // indirect
@@ -29,8 +28,9 @@ require (
 	golang.org/x/sys v0.0.0-20200124204421-9fbb57f87de9 // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
-	k8s.io/api v0.17.1
-	k8s.io/apimachinery v0.17.1
-	k8s.io/client-go v0.17.1
+	k8s.io/api v0.17.2
+	k8s.io/apimachinery v0.17.2
+	k8s.io/client-go v0.17.2
+	k8s.io/kubectl v0.17.2
 	k8s.io/utils v0.0.0-20200117235808-5f6fbceb4c31 // indirect
 )

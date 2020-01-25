@@ -11,7 +11,8 @@ type Owner struct {
 	Name, Type string
 }
 
-func (owner *Owner) findByReference(ownerReferences *[]metav1.OwnerReference) {
+func FindOwnerByReference(ownerReferences *[]metav1.OwnerReference) *Owner {
+	owner := Owner{}
 	for _, ownerReference := range *ownerReferences {
 		if !*ownerReference.Controller {
 			continue
@@ -20,11 +21,12 @@ func (owner *Owner) findByReference(ownerReferences *[]metav1.OwnerReference) {
 		owner.Type = ownerReference.Kind
 		break
 	}
+	return &owner
 }
 
-type OwnersList map[string]Owner
+type OwnersList map[string]*Owner
 
-func (client Client) listJobs() (*OwnersList, error) {
+func (client Client) ListJobs() (*OwnersList, error) {
 	objects := make(OwnersList)
 
 	items, err := client.conn.BatchV1().Jobs("").List(metav1.ListOptions{})
@@ -33,14 +35,12 @@ func (client Client) listJobs() (*OwnersList, error) {
 	}
 	for _, item := range items.Items {
 		name := item.ObjectMeta.Name
-		owner := Owner{}
-		owner.findByReference(&item.ObjectMeta.OwnerReferences)
-		objects[name] = owner
+		objects[name] = FindOwnerByReference(&item.ObjectMeta.OwnerReferences)
 	}
 	return &objects, err
 }
 
-func (client Client) listReplicaSets() (*OwnersList, error) {
+func (client Client) ListReplicaSets() (*OwnersList, error) {
 	objects := make(OwnersList)
 
 	items, err := client.conn.AppsV1().ReplicaSets("").List(metav1.ListOptions{})
@@ -49,9 +49,7 @@ func (client Client) listReplicaSets() (*OwnersList, error) {
 	}
 	for _, item := range items.Items {
 		name := item.ObjectMeta.Name
-		owner := Owner{}
-		owner.findByReference(&item.ObjectMeta.OwnerReferences)
-		objects[name] = owner
+		objects[name] = FindOwnerByReference(&item.ObjectMeta.OwnerReferences)
 	}
 	return &objects, err
 }
@@ -61,11 +59,11 @@ func (client Client) ListPods() (*[]models.Pod, error) {
 	if err != nil {
 		return nil, err
 	}
-	jobs, err := client.listJobs()
+	jobs, err := client.ListJobs()
 	if err != nil {
 		return nil, err
 	}
-	rs, err := client.listReplicaSets()
+	rs, err := client.ListReplicaSets()
 	if err != nil {
 		return nil, err
 	}
@@ -74,8 +72,7 @@ func (client Client) ListPods() (*[]models.Pod, error) {
 		// 1. Check for ownerReferences:
 		// if there is none, then it's a single pod running
 		// otherwise it can be: replicaset, job, statefulset and daemonset
-		owner := Owner{}
-		owner.findByReference(&item.ObjectMeta.OwnerReferences)
+		owner := FindOwnerByReference(&item.ObjectMeta.OwnerReferences)
 		if owner.Type == "Job" {
 			owner, _ = (*jobs)[owner.Name]
 		} else if owner.Type == "ReplicaSet" {
