@@ -25,8 +25,10 @@ require (
 	github.com/stretchr/testify v1.4.0
 	go.starlark.net v0.0.0-20191227232015-caa3e9aa5008 // indirect
 	golang.org/x/arch v0.0.0-20191126211547-368ea8f32fff // indirect
-	golang.org/x/sys v0.0.0-20200117145432-59e60aa80a0c // indirect
-	gopkg.in/yaml.v2 v2.2.7 // indirect
+	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect
+	golang.org/x/sys v0.0.0-20200124204421-9fbb57f87de9 // indirect
+	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
+	gopkg.in/yaml.v2 v2.2.8 // indirect
 	k8s.io/api v0.17.1
 	k8s.io/apimachinery v0.17.1
 	k8s.io/client-go v0.17.1
