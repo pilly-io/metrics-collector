@@ -68,15 +68,15 @@ var _ = Describe("Runner", func() {
 		})
 
 		It("should stop runner", func() {
-			runner := New("fake", executable, 10*time.Millisecond)
+			runner := New("fake", executable, 15*time.Millisecond)
 
 			executable.EXPECT().
 				Execute().
 				Times(1)
 			runner.Run()
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 			runner.Stop()
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 		})
 	})
 

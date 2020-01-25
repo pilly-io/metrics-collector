@@ -74,7 +74,7 @@ func (runner *Runner) Run() error {
 				runner.state.Event(stoppedEvent)
 				runner.stateMutex.Unlock()
 
-				log.Debug("runner stopped \"%s\"", runner.name)
+				log.Debugf("runner stopped \"%s\"", runner.name)
 				return
 			}
 		}

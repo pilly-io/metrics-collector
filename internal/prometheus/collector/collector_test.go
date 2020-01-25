@@ -19,6 +19,7 @@ func TestPrometheusClient(t *testing.T) {
 var _ = Describe("Collector", func() {
 	var (
 		metrics    chan *models.PodMetric
+		kubeClient *mocks.MockKubernetesClient
 		mockCtrl   *gomock.Controller
 		clientMock *mocks.MockClient
 		collector  *Collector
@@ -28,7 +29,8 @@ var _ = Describe("Collector", func() {
 		metrics = make(chan *models.PodMetric, 20)
 		mockCtrl = gomock.NewController(GinkgoT())
 		clientMock = mocks.NewMockClient(mockCtrl)
-		collector = New(clientMock, metrics)
+		kubeClient = mocks.NewMockKubernetesClient(mockCtrl)
+		collector = New(clientMock, kubeClient, metrics)
 	})
 
 	AfterEach(func() {
@@ -43,23 +45,33 @@ var _ = Describe("Collector", func() {
 	})
 
 	Describe("Execute()", func() {
+		BeforeEach(func() {
+			namespaces := []models.Namespace{
+				models.Namespace{Name: "kube-system"},
+			}
+			kubeClient.EXPECT().
+				ListNamespaces().
+				Return(&namespaces, nil).
+				Times(1)
+		})
+
 		It("should send metrics to output channel", func() {
 			metric1, metric2, metric3, metric4 :=
 				models.PodMetric{MetricValue: 1}, models.PodMetric{MetricValue: 2}, models.PodMetric{MetricValue: 3}, models.PodMetric{MetricValue: 4}
 			clientMock.EXPECT().
-				GetPodsCPURequests().
+				GetPodsCPURequests("kube-system").
 				Return(client.MetricsList{&metric1}, nil).
 				Times(1)
 			clientMock.EXPECT().
-				GetPodsMemoryRequests().
+				GetPodsMemoryRequests("kube-system").
 				Return(client.MetricsList{&metric2}, nil).
 				Times(1)
 			clientMock.EXPECT().
-				GetPodsMemoryUsage().
+				GetPodsMemoryUsage("kube-system").
 				Return(client.MetricsList{&metric3}, nil).
 				Times(1)
 			clientMock.EXPECT().
-				GetPodsCPUUsage().
+				GetPodsCPUUsage("kube-system").
 				Return(client.MetricsList{&metric4}, nil).
 				Times(1)
 

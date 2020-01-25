@@ -34,61 +34,61 @@ func (m *MockClient) EXPECT() *MockClientMockRecorder {
 }
 
 // GetPodsCPURequests mocks base method
-func (m *MockClient) GetPodsCPURequests() (client.MetricsList, error) {
+func (m *MockClient) GetPodsCPURequests(arg0 string) (client.MetricsList, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPodsCPURequests")
+	ret := m.ctrl.Call(m, "GetPodsCPURequests", arg0)
 	ret0, _ := ret[0].(client.MetricsList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetPodsCPURequests indicates an expected call of GetPodsCPURequests
-func (mr *MockClientMockRecorder) GetPodsCPURequests() *gomock.Call {
+func (mr *MockClientMockRecorder) GetPodsCPURequests(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsCPURequests", reflect.TypeOf((*MockClient)(nil).GetPodsCPURequests))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsCPURequests", reflect.TypeOf((*MockClient)(nil).GetPodsCPURequests), arg0)
 }
 
 // GetPodsCPUUsage mocks base method
-func (m *MockClient) GetPodsCPUUsage() (client.MetricsList, error) {
+func (m *MockClient) GetPodsCPUUsage(arg0 string) (client.MetricsList, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPodsCPUUsage")
+	ret := m.ctrl.Call(m, "GetPodsCPUUsage", arg0)
 	ret0, _ := ret[0].(client.MetricsList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetPodsCPUUsage indicates an expected call of GetPodsCPUUsage
-func (mr *MockClientMockRecorder) GetPodsCPUUsage() *gomock.Call {
+func (mr *MockClientMockRecorder) GetPodsCPUUsage(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsCPUUsage", reflect.TypeOf((*MockClient)(nil).GetPodsCPUUsage))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsCPUUsage", reflect.TypeOf((*MockClient)(nil).GetPodsCPUUsage), arg0)
 }
 
 // GetPodsMemoryRequests mocks base method
-func (m *MockClient) GetPodsMemoryRequests() (client.MetricsList, error) {
+func (m *MockClient) GetPodsMemoryRequests(arg0 string) (client.MetricsList, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPodsMemoryRequests")
+	ret := m.ctrl.Call(m, "GetPodsMemoryRequests", arg0)
 	ret0, _ := ret[0].(client.MetricsList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetPodsMemoryRequests indicates an expected call of GetPodsMemoryRequests
-func (mr *MockClientMockRecorder) GetPodsMemoryRequests() *gomock.Call {
+func (mr *MockClientMockRecorder) GetPodsMemoryRequests(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsMemoryRequests", reflect.TypeOf((*MockClient)(nil).GetPodsMemoryRequests))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsMemoryRequests", reflect.TypeOf((*MockClient)(nil).GetPodsMemoryRequests), arg0)
 }
 
 // GetPodsMemoryUsage mocks base method
-func (m *MockClient) GetPodsMemoryUsage() (client.MetricsList, error) {
+func (m *MockClient) GetPodsMemoryUsage(arg0 string) (client.MetricsList, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPodsMemoryUsage")
+	ret := m.ctrl.Call(m, "GetPodsMemoryUsage", arg0)
 	ret0, _ := ret[0].(client.MetricsList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetPodsMemoryUsage indicates an expected call of GetPodsMemoryUsage
-func (mr *MockClientMockRecorder) GetPodsMemoryUsage() *gomock.Call {
+func (mr *MockClientMockRecorder) GetPodsMemoryUsage(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsMemoryUsage", reflect.TypeOf((*MockClient)(nil).GetPodsMemoryUsage))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPodsMemoryUsage", reflect.TypeOf((*MockClient)(nil).GetPodsMemoryUsage), arg0)
 }

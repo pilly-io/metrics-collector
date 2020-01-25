@@ -1,10 +1,17 @@
 package kubernetes
 
 import (
+	"github.com/pilly-io/metrics-collector/internal/models"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
+
+type IClient interface {
+	ListPods() (*[]models.Pod, error)
+	ListNodes() (*[]models.Node, error)
+	ListNamespaces() (*[]models.Namespace, error)
+}
 
 type Client struct {
 	conn *kubernetes.Clientset
@@ -36,7 +43,7 @@ func (config *InClusterConfig) Get() (*rest.Config, error) {
 	return rest.InClusterConfig()
 }
 
-func NewKubernetesClient(configurator Configurator) (*Client, error) {
+func NewKubernetesClient(configurator Configurator) (IClient, error) {
 	config, err := configurator.Get()
 	if err != nil {
 		return nil, err

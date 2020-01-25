@@ -14,10 +14,10 @@ const (
 type MetricsList []*models.PodMetric
 
 type Client interface {
-	GetPodsCPURequests() (MetricsList, error)
-	GetPodsMemoryRequests() (MetricsList, error)
-	GetPodsMemoryUsage() (MetricsList, error)
-	GetPodsCPUUsage() (MetricsList, error)
+	GetPodsCPURequests(namespace string) (MetricsList, error)
+	GetPodsMemoryRequests(namespace string) (MetricsList, error)
+	GetPodsMemoryUsage(namespace string) (MetricsList, error)
+	GetPodsCPUUsage(namespace string) (MetricsList, error)
 }
 
 type ClientConfig struct {

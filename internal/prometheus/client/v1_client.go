@@ -13,10 +13,10 @@ import (
 )
 
 const (
-	podsCPURequestsQuery    = "sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"cpu\"})"
-	podsMemoryRequestsQuery = "sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"memory\"})"
-	podsMemoryUsageQuery    = "sum by (pod, namespace) (container_memory_usage_bytes{container!=\"POD\", container=~\".+\"})"
-	podsCPUUsageQuery       = "sum (rate(container_cpu_usage_seconds_total{container!=\"POD\", container=~\".+\"}[2m])) by (pod_name, namespace)"
+	podsCPURequestsQuery    = "sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"cpu\", namespace=\"%s\"})"
+	podsMemoryRequestsQuery = "sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"memory\", namespace=\"%s\"})"
+	podsMemoryUsageQuery    = "sum by (pod, namespace) (container_memory_usage_bytes{container!=\"POD\", container=~\".+\", namespace=\"%s\"})"
+	podsCPUUsageQuery       = "sum (rate(container_cpu_usage_seconds_total{container!=\"POD\", container=~\".+\", namespace=\"%s\"}[2m])) by (pod_name, namespace)"
 )
 
 type V1Client struct {
@@ -36,25 +36,31 @@ func NewV1Client(config ClientConfig) (*V1Client, error) {
 	return &V1Client{api: api, timeout: config.Timeout}, nil
 }
 
-func (client *V1Client) GetPodsMemoryRequests() (MetricsList, error) {
-	return client.sendQuery(podsMemoryRequestsQuery, "pod_memory_request")
+func (client *V1Client) GetPodsMemoryRequests(namespace string) (MetricsList, error) {
+	query := fmt.Sprintf(podsMemoryRequestsQuery, namespace)
+	return client.sendQuery(query, "pod_memory_request")
 }
 
-func (client *V1Client) GetPodsCPURequests() (MetricsList, error) {
-	return client.sendQuery(podsCPURequestsQuery, "pod_cpu_request")
+func (client *V1Client) GetPodsCPURequests(namespace string) (MetricsList, error) {
+	query := fmt.Sprintf(podsCPURequestsQuery, namespace)
+	return client.sendQuery(query, "pod_cpu_request")
 }
 
-func (client *V1Client) GetPodsMemoryUsage() (MetricsList, error) {
-	return client.sendQuery(podsMemoryUsageQuery, "pod_memory_usage")
+func (client *V1Client) GetPodsMemoryUsage(namespace string) (MetricsList, error) {
+	query := fmt.Sprintf(podsMemoryUsageQuery, namespace)
+	return client.sendQuery(query, "pod_memory_usage")
 }
 
-func (client *V1Client) GetPodsCPUUsage() (MetricsList, error) {
-	return client.sendQuery(podsCPUUsageQuery, "pod_cpu_usage")
+func (client *V1Client) GetPodsCPUUsage(namespace string) (MetricsList, error) {
+	query := fmt.Sprintf(podsCPUUsageQuery, namespace)
+	return client.sendQuery(query, "pod_cpu_usage")
 }
 
 func (client *V1Client) sendQuery(query string, metricName string) (MetricsList, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), client.timeout)
 	defer cancel()
+
+	log.Debugf("sending query=\"%s\" to prometheus", query)
 	result, warnings, err := client.api.Query(ctx, query, time.Now())
 	if err != nil {
 		return nil, fmt.Errorf("can't fetch metrics: %s", err)

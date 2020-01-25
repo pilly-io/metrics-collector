@@ -1,5 +1,7 @@
 # metrics-collector
 
+[![CircleCI](https://circleci.com/gh/pilly-io/metrics-collector.svg?style=svg)](https://circleci.com/gh/pilly-io/metrics-collector)
+
 MetricsCollector is responsible of collecting metrics and informations about resources in a Kubernetes cluster.
 
 

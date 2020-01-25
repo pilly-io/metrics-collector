@@ -53,10 +53,10 @@ var _ = Describe("ClientV1", func() {
 	Describe("GetPodsMemoryRequests()", func() {
 		It("should return samples", func() {
 			apiMock.EXPECT().
-				Query(gomock.Any(), gomock.Eq("sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"memory\"})"), gomock.Any()).
+				Query(gomock.Any(), gomock.Eq("sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"memory\", namespace=\"kube-system\"})"), gomock.Any()).
 				Return(samples, nil, nil).
 				AnyTimes()
-			result, _ := client.GetPodsMemoryRequests()
+			result, _ := client.GetPodsMemoryRequests("kube-system")
 			Expect(result).To(HaveLen(1))
 
 			metric := result[0]
@@ -69,7 +69,7 @@ var _ = Describe("ClientV1", func() {
 				Return(nil, nil, errors.New("fake error")).
 				AnyTimes()
 
-			_, err := client.GetPodsMemoryRequests()
+			_, err := client.GetPodsMemoryRequests("kube-system")
 			Expect(err).To(HaveOccurred())
 		})
 	})
@@ -77,10 +77,10 @@ var _ = Describe("ClientV1", func() {
 	Describe("GetPodsCPURequests()", func() {
 		It("should return samples", func() {
 			apiMock.EXPECT().
-				Query(gomock.Any(), gomock.Eq("sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"cpu\"})"), gomock.Any()).
+				Query(gomock.Any(), gomock.Eq("sum by (pod, resource, namespace) (kube_pod_container_resource_requests{resource=\"cpu\", namespace=\"kube-system\"})"), gomock.Any()).
 				Return(samples, nil, nil).
 				AnyTimes()
-			result, _ := client.GetPodsCPURequests()
+			result, _ := client.GetPodsCPURequests("kube-system")
 			Expect(result).To(HaveLen(1))
 
 			metric := result[0]
@@ -93,7 +93,7 @@ var _ = Describe("ClientV1", func() {
 				Return(nil, nil, errors.New("fake error")).
 				AnyTimes()
 
-			_, err := client.GetPodsCPURequests()
+			_, err := client.GetPodsCPURequests("kube-system")
 			Expect(err).To(HaveOccurred())
 		})
 	})
@@ -101,10 +101,10 @@ var _ = Describe("ClientV1", func() {
 	Describe("GetPodsMemoryUsage()", func() {
 		It("should return samples", func() {
 			apiMock.EXPECT().
-				Query(gomock.Any(), gomock.Eq("sum by (pod, namespace) (container_memory_usage_bytes{container!=\"POD\", container=~\".+\"})"), gomock.Any()).
+				Query(gomock.Any(), gomock.Eq("sum by (pod, namespace) (container_memory_usage_bytes{container!=\"POD\", container=~\".+\", namespace=\"kube-system\"})"), gomock.Any()).
 				Return(samples, nil, nil).
 				AnyTimes()
-			result, _ := client.GetPodsMemoryUsage()
+			result, _ := client.GetPodsMemoryUsage("kube-system")
 			Expect(result).To(HaveLen(1))
 
 			metric := result[0]
@@ -117,7 +117,7 @@ var _ = Describe("ClientV1", func() {
 				Return(nil, nil, errors.New("fake error")).
 				AnyTimes()
 
-			_, err := client.GetPodsMemoryUsage()
+			_, err := client.GetPodsMemoryUsage("kube-system")
 			Expect(err).To(HaveOccurred())
 		})
 	})
@@ -125,10 +125,10 @@ var _ = Describe("ClientV1", func() {
 	Describe("GetPodsCPUUsage()", func() {
 		It("should return samples", func() {
 			apiMock.EXPECT().
-				Query(gomock.Any(), gomock.Eq("sum (rate(container_cpu_usage_seconds_total{container!=\"POD\", container=~\".+\"}[2m])) by (pod_name, namespace)"), gomock.Any()).
+				Query(gomock.Any(), gomock.Eq("sum (rate(container_cpu_usage_seconds_total{container!=\"POD\", container=~\".+\", namespace=\"kube-system\"}[2m])) by (pod_name, namespace)"), gomock.Any()).
 				Return(samples, nil, nil).
 				AnyTimes()
-			result, _ := client.GetPodsCPUUsage()
+			result, _ := client.GetPodsCPUUsage("kube-system")
 			Expect(result).To(HaveLen(1))
 
 			metric := result[0]
@@ -141,7 +141,7 @@ var _ = Describe("ClientV1", func() {
 				Return(nil, nil, errors.New("fake error")).
 				AnyTimes()
 
-			_, err := client.GetPodsCPUUsage()
+			_, err := client.GetPodsCPUUsage("kube-system")
 			Expect(err).To(HaveOccurred())
 		})
 	})
