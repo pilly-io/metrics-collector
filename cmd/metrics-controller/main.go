@@ -4,9 +4,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/pilly-io/metrics-collector/internal/models"
 	"github.com/pilly-io/metrics-collector/internal/prometheus/client"
 	"github.com/pilly-io/metrics-collector/internal/prometheus/collector"
-	prom "github.com/prometheus/common/model"
+	"github.com/pilly-io/metrics-collector/internal/runner"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -18,9 +19,6 @@ func init() {
 }
 
 func main() {
-	// recup config
-	// check que prometheus est up
-	// run
 	config := GetConfig()
 	err := config.Validate()
 	if err != nil {
@@ -37,26 +35,20 @@ func main() {
 		log.Fatalf("can't create prometheus client: %s", err)
 	}
 
-	metrics := make(chan *prom.Sample, 20)
-	collector := collector.New(client, metrics, collector.CollectorConfig{ScrapeInterval: 2 * time.Second})
+	metrics := make(chan *models.PodMetric, 20)
+	promCollector := collector.New(client, metrics)
+	promRunner := runner.New("prometheus-collector", promCollector, 2*time.Second)
 
-	if err := collector.Run(); err != nil {
+	if err := promRunner.Run(); err != nil {
 		log.Error(err)
 	}
-	if err := collector.Run(); err != nil {
-		log.Error(err)
-	}
-	collector.Run()
 	go func() {
-		for _ = range metrics {
-			//log.Infof("%s=%s", sample.Metric, sample.Value)
+		for metric := range metrics {
+			log.Infof("%s=%f", metric.MetricName, metric.MetricValue)
 		}
 	}()
 	time.Sleep(10 * time.Second)
-	if err := collector.Stop(); err != nil {
-		log.Error(err)
-	}
-	if err := collector.Stop(); err != nil {
+	if err := promRunner.Stop(); err != nil {
 		log.Error(err)
 	}
 }
