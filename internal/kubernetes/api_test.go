@@ -83,3 +83,7 @@ var _ = Describe("ListReplicaSets()", func() {
 		Expect((*rs)["hola-1579715460"].Name).To(Equal(""))
 	})
 })
+
+//ListNodes
+//ListNamespaces
+//ListPods

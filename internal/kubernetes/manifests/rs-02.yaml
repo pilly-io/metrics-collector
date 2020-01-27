@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  labels:
+    k8s-app: hola
+  name: hola-1579715460
+  namespace: default
+  uid: bd768bf7-0232-470f-9bec-31feda02a3e3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: hola
+  template:
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ""
+      labels:
+    spec:
+      containers:
+      - image: coredns/coredns:1.5.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: coredns
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        - containerPort: 9153
+          name: metrics
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: 8181
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 170Mi
+          requests:
+            cpu: 100m
+            memory: 70Mi
