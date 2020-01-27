@@ -4,15 +4,24 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	batchv1 "k8s.io/api/batch/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/kubernetes/fake"
 )
+
+func GenerateKubernetesObjects(paths []string) []runtime.Object {
+	objects := make([]runtime.Object, len(paths))
+	for index, filename := range paths {
+		file, _ := os.Open(filename)
+		decoder := yaml.NewYAMLOrJSONDecoder(file, 64)
+		decoder.Decode(&objects[index])
+	}
+	fmt.Println(objects)
+	return objects
+}
 
 var _ = Describe("FindOwnerByReference()", func() {
 	_true := true
@@ -40,32 +49,15 @@ var _ = Describe("FindOwnerByReference()", func() {
 
 var _ = Describe("ListJobs()", func() {
 	var (
-		mockCtrl *gomock.Controller
-		client   *Client
-		//testFactory *cmdtesting.TestFactory
+		client *Client
 	)
 	BeforeEach(func() {
-		mockCtrl = gomock.NewController(GinkgoT())
-		//testFactory = cmdtesting.NewTestFactory()
-		//fmt.Println(testFactory)
-		jobsYaml, _ := os.Open("manifests/jobs.yaml")
-		jobsDecoder := yaml.NewYAMLOrJSONDecoder(jobsYaml, 64)
-		/*jobs := []batchv1.Job{
-			&batchv1.Job{},
-			&batchv1.Job{},
-		}
-		jobsDecoder.Decode(&jobs)*/
-		job := &batchv1.Job{}
-		jobsDecoder.Decode(&job)
-		conn := fake.NewSimpleClientset(job)
-		client = &Client{conn}
 
-		//jobMock = mocks.NewMockJobInterface(mockCtrl)
-		//conn, _ := testFactory.KubernetesClientSet()
-		//fmt.Println(conn)
-	})
-	AfterEach(func() {
-		mockCtrl.Finish()
+		jobYamls := []string{"manifests/job-01.yaml", "manifests/job-02.yaml"}
+		jobs := GenerateKubernetesObjects(jobYamls)
+		fmt.Println(jobs)
+		conn := fake.NewSimpleClientset(jobs...)
+		client = &Client{conn}
 	})
 	It("should work", func() {
 		jobs, _ := client.ListJobs()
