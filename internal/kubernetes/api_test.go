@@ -1,25 +1,24 @@
 package kubernetes
 
 import (
-	"fmt"
-	"os"
+	"io/ioutil"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/kubernetes/fake"
+	"k8s.io/client-go/kubernetes/scheme"
 )
 
 func GenerateKubernetesObjects(paths []string) []runtime.Object {
 	objects := make([]runtime.Object, len(paths))
+	decoder := scheme.Codecs.UniversalDeserializer().Decode
 	for index, filename := range paths {
-		file, _ := os.Open(filename)
-		decoder := yaml.NewYAMLOrJSONDecoder(file, 64)
-		decoder.Decode(&objects[index])
+		content, _ := ioutil.ReadFile(filename)
+		object, _, _ := decoder([]byte(content), nil, nil)
+		objects[index] = object
 	}
-	fmt.Println(objects)
 	return objects
 }
 
@@ -52,15 +51,31 @@ var _ = Describe("ListJobs()", func() {
 		client *Client
 	)
 	BeforeEach(func() {
-
-		jobYamls := []string{"manifests/job-01.yaml", "manifests/job-02.yaml"}
-		jobs := GenerateKubernetesObjects(jobYamls)
-		fmt.Println(jobs)
-		conn := fake.NewSimpleClientset(jobs...)
+		yamls := []string{"manifests/job-01.yaml", "manifests/job-02.yaml"}
+		objects := GenerateKubernetesObjects(yamls)
+		conn := fake.NewSimpleClientset(objects...)
 		client = &Client{conn}
 	})
+
 	It("should work", func() {
 		jobs, _ := client.ListJobs()
-		fmt.Println(jobs)
+		Expect(*jobs).To(HaveLen(2))
 	})
 })
+
+/*var _ = Describe("ListReplicaSets()", func() {
+	var (
+		client *Client
+	)
+	BeforeEach(func() {
+		yamls := []string{"manifests/rs-01.yaml", "manifests/rs-02.yaml"}
+		objects := GenerateKubernetesObjects(yamls)
+		conn := fake.NewSimpleClientset(objects...)
+		client = &Client{conn}
+	})
+
+	It("should work", func() {
+		rs, _ := client.ListReplicaSets()
+		Expect(*rs).To(HaveLen(2))
+	})
+})*/
