@@ -60,6 +60,8 @@ var _ = Describe("ListJobs()", func() {
 	It("should work", func() {
 		jobs, _ := client.ListJobs()
 		Expect(*jobs).To(HaveLen(2))
+		Expect((*jobs)["hello-1579715460"].Name).To(Equal("hello"))
+		Expect((*jobs)["hola-1579715460"].Name).To(Equal(""))
 	})
 })
 
