@@ -65,7 +65,7 @@ var _ = Describe("ListJobs()", func() {
 	})
 })
 
-/*var _ = Describe("ListReplicaSets()", func() {
+var _ = Describe("ListReplicaSets()", func() {
 	var (
 		client *Client
 	)
@@ -79,5 +79,7 @@ var _ = Describe("ListJobs()", func() {
 	It("should work", func() {
 		rs, _ := client.ListReplicaSets()
 		Expect(*rs).To(HaveLen(2))
+		Expect((*rs)["hello-1579715460"].Name).To(Equal("hello"))
+		Expect((*rs)["hola-1579715460"].Name).To(Equal(""))
 	})
-})*/
+})
