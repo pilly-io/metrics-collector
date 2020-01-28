@@ -105,8 +105,15 @@ func (client Client) ListNodes() (*[]models.Node, error) {
 			return nil, err
 		}
 		list[index] = models.Node{
-			Name:   item.ObjectMeta.Name,
-			Labels: string(labels),
+			Name:         item.ObjectMeta.Name,
+			Labels:       string(labels),
+			InstanceType: item.Labels["beta.kubernetes.io/instance-type"],
+			Region:       item.Labels["failure-domain.beta.kubernetes.io/region"],
+			Zone:         item.Labels["failure-domain.beta.kubernetes.io/zone"],
+			Hostname:     item.Labels["kubernetes.io/hostname"],
+			UID:          string(item.UID),
+			OS:           item.Labels["kubernetes.io/os"],
+			Version:      item.Status.NodeInfo.KubeletVersion,
 		}
 	}
 	return &list, err

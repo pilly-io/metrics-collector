@@ -57,7 +57,7 @@ var _ = Describe("ListJobs()", func() {
 		client = &Client{conn}
 	})
 
-	It("should work", func() {
+	It("should return 2 jobs", func() {
 		jobs, _ := client.ListJobs()
 		Expect(*jobs).To(HaveLen(2))
 		Expect((*jobs)["hello-1579715460"].Name).To(Equal("hello"))
@@ -76,7 +76,7 @@ var _ = Describe("ListReplicaSets()", func() {
 		client = &Client{conn}
 	})
 
-	It("should work", func() {
+	It("should returns 2 replicasets", func() {
 		rs, _ := client.ListReplicaSets()
 		Expect(*rs).To(HaveLen(2))
 		Expect((*rs)["hello-1579715460"].Name).To(Equal("hello"))
@@ -84,6 +84,51 @@ var _ = Describe("ListReplicaSets()", func() {
 	})
 })
 
-//ListNodes
+var _ = Describe("ListNodes()", func() {
+	var (
+		client *Client
+	)
+	BeforeEach(func() {
+		yamls := []string{"manifests/node-01.yaml", "manifests/node-02.yaml"}
+		objects := GenerateKubernetesObjects(yamls)
+		conn := fake.NewSimpleClientset(objects...)
+		client = &Client{conn}
+	})
+
+	It("should returns 2 nodes", func() {
+		nodes, _ := client.ListNodes()
+		Expect(*nodes).To(HaveLen(2))
+		node01 := (*nodes)[0]
+		Expect(node01.Name).To(Equal("node-01"))
+		Expect(node01.InstanceType).To(Equal("m5.xlarge"))
+		Expect(node01.Region).To(Equal("eu-west-1"))
+		Expect(node01.Zone).To(Equal("eu-west-1c"))
+		Expect(node01.Hostname).To(Equal("node-01.internal"))
+		Expect(node01.Version).To(Equal("v1.14.10"))
+		Expect(node01.OS).To(Equal("linux"))
+		Expect(node01.Labels).ToNot(Equal(""))
+	})
+})
+
+var _ = Describe("ListNamespaces()", func() {
+	var (
+		client *Client
+	)
+	BeforeEach(func() {
+		yamls := []string{"manifests/ns-01.yaml", "manifests/ns-02.yaml"}
+		objects := GenerateKubernetesObjects(yamls)
+		conn := fake.NewSimpleClientset(objects...)
+		client = &Client{conn}
+	})
+
+	It("should returns 2 namespaces", func() {
+		namespaces, _ := client.ListNamespaces()
+		Expect(*namespaces).To(HaveLen(2))
+		namespace01 := (*namespaces)[0]
+		Expect(namespace01.Name).To(Equal("namespace-01"))
+		Expect(namespace01.Labels).ToNot(Equal(""))
+	})
+})
+
 //ListNamespaces
 //ListPods

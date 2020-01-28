@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	uuid "github.com/satori/go.uuid"
 )
 
 type Node struct {
@@ -13,7 +12,7 @@ type Node struct {
 	Region       string
 	Zone         string
 	Hostname     string
-	uid          uuid.UUID `gorm:"type:uuid"`
+	UID          string
 	Version      string
 	OS           string
 	Labels       string

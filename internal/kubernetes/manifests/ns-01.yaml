@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: namespace-01
+  name: namespace-01
+  uid: 830fbf64-043e-4cee-b353-d55387db7e3d
+spec:
+  finalizers:
+  - kubernetes

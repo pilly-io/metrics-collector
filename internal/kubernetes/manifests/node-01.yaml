@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Node
+metadata:
+  annotations:
+    node.alpha.kubernetes.io/ttl: "0"
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/instance-type: m5.xlarge
+    beta.kubernetes.io/os: linux
+    failure-domain.beta.kubernetes.io/region: eu-west-1
+    failure-domain.beta.kubernetes.io/zone: eu-west-1c
+    kubernetes.io/arch: amd64
+    kubernetes.io/hostname: node-01.internal
+    kubernetes.io/os: linux
+    kubernetes.io/role: node
+  name: node-01
+  uid: 8b503612-5b59-40b3-804b-087a86bcc8ba
+spec:
+  podCIDR: 100.96.8.0/24
+  providerID: aws:///eu-west-1c/i-08dd03b020ce5bd5c
+status:
+  nodeInfo:
+    architecture: amd64
+    bootID: d814c196-1168-4d74-9b8d-06250b85ec05
+    containerRuntimeVersion: docker://18.6.3
+    kernelVersion: 4.9.0-9-amd64
+    kubeProxyVersion: v1.14.10
+    kubeletVersion: v1.14.10
+    machineID: ec22bc327b10aaaa862dc779f1f70586
+    operatingSystem: linux
+    osImage: Debian GNU/Linux 9 (stretch)
+    systemUUID: 5FF5BFFE-7484-4539-B932-A2572D36C405
