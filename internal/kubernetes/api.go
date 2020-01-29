@@ -85,6 +85,7 @@ func (client Client) ListPods() (*[]models.Pod, error) {
 		}
 		list[index] = models.Pod{
 			Name:      item.ObjectMeta.Name,
+			Namespace: item.ObjectMeta.Namespace,
 			Labels:    string(labels),
 			OwnerName: owner.Name,
 			OwnerType: owner.Type,

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    controller-uid: 59a49f6b-f560-4b83-a413-7e534226ac9d
+    job-name: hello-1579715460
+  name: pod01
+  namespace: testing
+  ownerReferences:
+  - apiVersion: batch/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: Job
+    name: hello-1579715460
+    uid: 59a49f6b-f560-4b83-a413-7e534226ac9d
+  uid: c5024c62-e224-4840-a5b6-ee07fc056ba4
+spec:
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - date; echo Hello from the Kubernetes cluster
+    image: busybox
+    imagePullPolicy: Always
+    name: hello
+    resources: {}

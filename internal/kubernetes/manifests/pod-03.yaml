@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod03
+  uid: bcca8fc1-e1db-4643-9c42-f45a1dd8777e
+spec:
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - date; echo Hello from the Kubernetes cluster
+    image: busybox
+    imagePullPolicy: Always
+    name: hello
+    resources: {}

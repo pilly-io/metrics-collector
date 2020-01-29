@@ -98,6 +98,10 @@ var _ = Describe("ListNodes()", func() {
 	It("should returns 2 nodes", func() {
 		nodes, _ := client.ListNodes()
 		Expect(*nodes).To(HaveLen(2))
+	})
+
+	It("should have all the attributes filled", func() {
+		nodes, _ := client.ListNodes()
 		node01 := (*nodes)[0]
 		Expect(node01.Name).To(Equal("node-01"))
 		Expect(node01.InstanceType).To(Equal("m5.xlarge"))
@@ -124,11 +128,52 @@ var _ = Describe("ListNamespaces()", func() {
 	It("should returns 2 namespaces", func() {
 		namespaces, _ := client.ListNamespaces()
 		Expect(*namespaces).To(HaveLen(2))
+	})
+
+	It("should have all the attributes filled", func() {
+		namespaces, _ := client.ListNamespaces()
 		namespace01 := (*namespaces)[0]
 		Expect(namespace01.Name).To(Equal("namespace-01"))
 		Expect(namespace01.Labels).ToNot(Equal(""))
 	})
 })
 
-//ListNamespaces
-//ListPods
+var _ = Describe("ListPods()", func() {
+	var (
+		client *Client
+	)
+	BeforeEach(func() {
+		yamls := []string{"manifests/rs-01.yaml", "manifests/job-01.yaml", "manifests/pod-01.yaml", "manifests/pod-02.yaml", "manifests/pod-03.yaml"}
+		objects := GenerateKubernetesObjects(yamls)
+		conn := fake.NewSimpleClientset(objects...)
+		client = &Client{conn}
+	})
+
+	It("should returns 3 pods", func() {
+		pods, _ := client.ListPods()
+		Expect(*pods).To(HaveLen(3))
+	})
+
+	It("It should have all the attributes filled", func() {
+		pods, _ := client.ListPods()
+		// pod01 comes from a CronJob
+		pod01 := (*pods)[0]
+		Expect(pod01.Name).To(Equal("pod01"))
+		Expect(pod01.Namespace).To(Equal("testing"))
+		Expect(pod01.Labels).ToNot(Equal(""))
+		Expect(pod01.OwnerType).To(Equal("CronJob"))
+		Expect(pod01.OwnerName).To(Equal("hello"))
+		// pod02 comes from a Deployment
+		pod02 := (*pods)[1]
+		Expect(pod02.Name).To(Equal("pod02"))
+		Expect(pod02.Namespace).To(Equal("default"))
+		Expect(pod02.OwnerType).To(Equal("Deployment"))
+		Expect(pod02.OwnerName).To(Equal("hello"))
+		// pod03 is a standalone
+		pod03 := (*pods)[2]
+		Expect(pod03.Name).To(Equal("pod03"))
+		Expect(pod03.Namespace).To(Equal(""))
+		Expect(pod03.OwnerType).To(Equal(""))
+		Expect(pod03.OwnerName).To(Equal(""))
+	})
+})

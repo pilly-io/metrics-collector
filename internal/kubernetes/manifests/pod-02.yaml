@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod02
+  namespace: default
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: hello-1579715460
+    uid: d23b1d2c-978a-48aa-89c8-d743e2e022e9
+  uid: 5e4e13e0-5737-45b9-b6d6-8d6ba47fe20a
+spec:
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - date; echo Hello from the Kubernetes cluster
+    image: busybox
+    imagePullPolicy: Always
+    name: hello
+    resources: {}
