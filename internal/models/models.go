@@ -42,4 +42,5 @@ type PodMetric struct {
 	PodName     string
 	OwnerType   string
 	OwnerName   string
+	IsSent      bool
 }
