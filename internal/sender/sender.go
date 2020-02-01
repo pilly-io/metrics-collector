@@ -25,12 +25,12 @@ func (sender *Sender) ConsolidateDB() {
 			owner_name=(
 				SELECT owner_name 
 				FROM pods
-				WHERE pod_metrics.pod_name=pods.name
+				WHERE pod_metrics.pod_name=pods.name AND pod_metrics.namespace=pods.namespace
 			),
 			owner_type=(
 				SELECT owner_type
 				FROM pods
-				WHERE pod_metrics.pod_name=pods.name
+				WHERE pod_metrics.pod_name=pods.name AND pod_metrics.namespace=pods.namespace
 			)`)
 }
 

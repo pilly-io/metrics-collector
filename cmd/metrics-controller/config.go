@@ -20,7 +20,7 @@ func init() {
 	viper.AutomaticEnv()
 	viper.SetDefault("INTERVAL", 60)
 	viper.SetDefault("KUBECONFIG_PATH", nil)
-	viper.SetDefault("API_ENDPOINT", "http://127.0.0.1:8000/v1/")
+	viper.SetDefault("API_ENDPOINT", "http://127.0.0.1:8080/v1/")
 }
 
 // GetConfig fetches the config from  ENV vars and returns a Config
