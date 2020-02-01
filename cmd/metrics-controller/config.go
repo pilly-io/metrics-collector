@@ -10,6 +10,7 @@ import (
 type Config struct {
 	PrometheusURL  string
 	KubeconfigPath string
+	APIEndpoint    string
 	DBURI          string
 	Interval       int
 }
@@ -19,6 +20,7 @@ func init() {
 	viper.AutomaticEnv()
 	viper.SetDefault("INTERVAL", 60)
 	viper.SetDefault("KUBECONFIG_PATH", nil)
+	viper.SetDefault("API_ENDPOINT", "http://127.0.0.1:8000/v1/")
 }
 
 // GetConfig fetches the config from  ENV vars and returns a Config
@@ -26,6 +28,7 @@ func GetConfig() Config {
 	return Config{
 		PrometheusURL:  viper.GetString("PROMETHEUS_URL"),
 		KubeconfigPath: viper.GetString("KUBECONFIG_PATH"),
+		APIEndpoint:    viper.GetString("API_ENDPOINT"),
 		DBURI:          viper.GetString("DB_URI"),
 		Interval:       viper.GetInt("INTERVAL"),
 	}
