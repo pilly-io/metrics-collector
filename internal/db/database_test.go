@@ -17,7 +17,7 @@ func TestRunner(t *testing.T) {
 
 var _ = Describe("Database", func() {
 	var (
-		db *Database
+		db *GormDatabase
 	)
 	BeforeEach(func() {
 		db, _ = New(":memory:")
@@ -67,6 +67,7 @@ var _ = Describe("Database", func() {
 			db.Model(&models.Pod{}).Count(&count)
 			Expect(count).To(Equal(1))
 			db.DeleteOldCachedData(1 * time.Hour)
+			db.Model(&models.Pod{}).Count(&count)
 			Expect(count).To(Equal(0))
 		})
 	})
